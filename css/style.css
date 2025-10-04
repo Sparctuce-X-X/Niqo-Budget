@@ -1,6 +1,29 @@
+.hidden{ 
+    display: none;
+}
+.auth-container{
+     max-width: 420px; margin: 6rem auto; padding: 2rem; 
+}
 
-.hidden {
-  opacity: 0;
-  pointer-events: none;
-  position: absolute;
+.auth-container form {
+     display: grid; gap: 1rem; 
+}
+
+.auth-container label {
+     display: grid; gap: .35rem; 
+}
+
+.auth-container input, .auth-container select, .auth-container button {
+     padding: .75rem; 
+}
+.switch-form {
+     font-size: .9rem; 
+}
+
+.error {
+     color: #b00020; font-size: .9rem; 
+}
+
+.success {
+     color: #0a7f3f; font-size: .9rem; 
 }
