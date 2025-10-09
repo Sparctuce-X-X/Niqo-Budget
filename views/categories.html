@@ -9,40 +9,57 @@
   <script src="../js/main.js" defer></script>
 </head>
 <body>
-  <div>
-    <aside>
-      <div>
-        <div>€</div>
-        <div>NIQO</div>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-symbol">€</div>
+        <div class="logo-text">NIQO BUDGET</div>
       </div>
-      <nav>
+      <nav class="nav">
         <a href="dashboard.html">Dashboard</a>
         <a href="transactions.html">Transactions</a>
-        <a href="categories.html" aria-current="page">Catégories</a>
+        <a href="categories.html" class="active" aria-current="page">Catégories</a>
         <a href="settings.html">Paramètres</a>
       </nav>
     </aside>
 
-    <main>
-      <header><h1>Catégories</h1></header>
+    <main class="main">
+      <header class="main-header">
+        <h1>Catégories</h1>
+      </header>
 
-      <section>
-        <article>
+      <section class="cards-grid">
+        <!-- Catégories par défaut -->
+        <article class="card">
           <h3>Catégories par défaut</h3>
-          <ul></ul>
+          <ul id="default-cats" class="cat-list">
+            <!-- rempli par categories.js -->
+          </ul>
         </article>
 
-        <article>
+        <!-- Catégories personnalisées -->
+        <article class="card">
           <h3>Catégories personnalisées</h3>
-          <form>
-            <input/>
-            <select>
-              <option>Dépense</option>
-              <option>Revenu</option>
+
+          <form id="cat-form" class="cat-form">
+            <input
+              type="text"
+              name="name"
+              class="cat-input"
+              placeholder="Nom de la catégorie"
+              required
+            />
+            <select name="type" class="cat-select" required>
+              <option value="expense">Dépense</option>
+              <option value="income">Revenu</option>
             </select>
-            <button>Ajouter</button>
+            <button type="submit" class="btn">Ajouter</button>
           </form>
-          <ul></ul>
+
+          <ul id="custom-cats" class="cat-list">
+            <!-- rempli par categories.js -->
+          </ul>
+          <p id="custom-empty" class="muted">Aucune catégorie personnalisée.</p>
         </article>
       </section>
     </main>
