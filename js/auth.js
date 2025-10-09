@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded' , () => {
     }
 
     function hideMessage(el) {
+        if (!el) return;
         el.classList.add('hidden');
         el.textContent = '';
     }
@@ -113,7 +114,7 @@ document.addEventListener('DOMContentLoaded' , () => {
 
         
         setSession({ username: user.username, currency: user.currency, guest: false });
-
+        redirect('./dashboard.html');
         
 
     });
@@ -125,6 +126,54 @@ document.addEventListener('DOMContentLoaded' , () => {
         redirect('./dashboard.html');
     })
 
-    console.log(getSession());
+    const registerForm = document.getElementById('register-form');
+    const registerMsg = document.getElementById('register-message');
 
-})
+    registerForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideMessage(registerMsg);
+
+    const form = new FormData(registerForm);
+    const username = (form.get('username') || '').toString().trim();
+    const password = (form.get('password') || '').toString();
+    const currency = (form.get('currency') || 'EUR').toString();
+
+    
+    if (!username || !password) {
+        showMessage(registerMsg, 'Tous les champs sont requis.');
+        return;
+    }
+    if (username.length < 3) {
+        showMessage(registerMsg, 'Le nom d’utilisateur doit faire au moins 3 caractères.');
+        return;
+    }
+    if (password.length < 6) {
+        showMessage(registerMsg, 'Mot de passe trop court (≥ 6 caractères).');
+        return;
+    }
+
+    
+    const users = loadUsers();
+    const exists = users.some(u => u.username.toLowerCase() === username.toLowerCase());
+    if (exists) {
+        showMessage(registerMsg, 'Ce nom d’utilisateur est déjà pris.');
+        return;
+    }
+
+    
+    const passwordHash = await sha256(password);
+    users.push({ username, passwordHash, currency, createdAt: Date.now() });
+    saveUsers(users);
+
+    
+    showMessage(registerMsg, 'Compte créé ! Vous pouvez vous connecter.', 'success');
+    setTimeout(() => {
+        registerView.classList.add('hidden');
+        loginView.classList.remove('hidden');
+    }, 800);
+    });
+
+    console.log(getSession());
+    console.log(loadUsers());
+
+});
