@@ -374,3 +374,19 @@ body {
   justify-content: flex-end;
   margin-top: .2rem;
 }
+
+.logout-btn {
+  margin-top: auto;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  width: 100%;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+  background-color: #c0392b;
+}

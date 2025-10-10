@@ -172,8 +172,4 @@ document.addEventListener('DOMContentLoaded' , () => {
         loginView.classList.remove('hidden');
     }, 800);
     });
-
-    console.log(getSession());
-    console.log(loadUsers());
-
 });
