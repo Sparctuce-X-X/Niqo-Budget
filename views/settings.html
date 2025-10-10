@@ -7,58 +7,73 @@
   <link rel="stylesheet" href="../css/style.css">
   <script src="../js/settings.js" defer></script>
   <script src="../js/main.js" defer></script>
+   <script src="../js/logout.js" defer></script>
 </head>
 <body>
-  <div>
-    <aside>
-      <div>
-        <div>€</div>
-        <div>NIQO</div>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-symbol">€</div>
+        <div class="logo-text">NIQO BUDGET</div>
       </div>
-      <nav>
+      <nav class="nav">
         <a href="dashboard.html">Dashboard</a>
         <a href="transactions.html">Transactions</a>
         <a href="categories.html">Catégories</a>
-        <a href="settings.html" aria-current="page">Paramètres</a>
+        <a href="settings.html" class="active" aria-current="page">Paramètres</a>
       </nav>
+
+      <button id="logout-btn" class="logout-btn">Déconnexion</button>
     </aside>
 
-    <main>
-      <header><h1>Paramètres</h1></header>
+    <main class="main">
+      <header class="main-header">
+        <h1>Paramètres</h1>
+      </header>
 
-      <section>
-        <article>
+      <section class="cards-grid">
+        <!-- Profil -->
+        <article class="card">
           <h3>Profil</h3>
-          <form>
-            <label>
-              <span>Nom</span>
-              <input required>
+          <form id="profile-form" class="form-grid">
+            <label class="form-field">
+              <span class="form-label">Nom</span>
+              <input type="text" name="name" id="profile-name" required>
             </label>
-            <label>
-              <span>Devise</span>
-              <select>
-                <option>EUR (€)</option>
-                <option>USD ($)</option>
-                <option>GBP (£)</option>
+
+            <label class="form-field">
+              <span class="form-label">Devise</span>
+              <select name="currency" id="profile-currency" required>
+                <option value="EUR">EUR (€)</option>
+                <option value="USD">USD ($)</option>
+                <option value="GBP">GBP (£)</option>
               </select>
             </label>
-            <button type="submit">Enregistrer</button>
+
+            <div class="form-actions">
+              <button type="submit" class="btn">Enregistrer</button>
+            </div>
           </form>
+          <p id="profile-message" class="muted"></p>
         </article>
 
-        <article>
+        <!-- Thème -->
+        <article class="card">
           <h3>Thème</h3>
-          <div style="margin-top:8px;">
-            <button>Clair</button>
-            <button>Sombre</button>
-            <button>Auto</button>
+          <div class="btn-group" style="margin-top: .6rem;">
+            <button class="btn" data-theme="light">Clair</button>
+            <button class="btn" data-theme="dark">Sombre</button>
+            <button class="btn" data-theme="auto">Auto</button>
           </div>
+          <p class="muted" id="theme-message" style="margin-top:.6rem;"></p>
         </article>
 
-        <article>
+        <!-- Réinitialisation -->
+        <article class="card">
           <h3>Réinitialisation</h3>
-          <p>Supprime toutes les données locales.</p>
-          <button>Réinitialiser</button>
+          <p class="muted">Supprime toutes les données locales (utilisateurs, transactions, catégories, session).</p>
+          <button id="reset-btn" class="btn btn-danger" style="margin-top:.6rem;">Réinitialiser</button>
+          <p id="reset-message" class="muted" style="margin-top:.4rem;"></p>
         </article>
       </section>
     </main>

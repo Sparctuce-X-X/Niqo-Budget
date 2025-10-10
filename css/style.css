@@ -1,6 +1,392 @@
+:root {
+  --bg: #ffffff;
+  --text: #222;
+  --primary: #333;
+  --gray: #ddd;
+  --accent: #0077ff;
+}
 
-.hidden {
-  opacity: 0;
-  pointer-events: none;
-  position: absolute;
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  display: flex;
+}
+
+.layout {
+  display: flex;
+  width: 100%;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+  background: #f8f8f8;
+  border-right: 1px solid var(--gray);
+  padding: 2rem 1rem;
+  width: 220px;
+
+  /* nouvelle disposition */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2rem; /* espace entre logo et nav */
+}
+
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.logo-symbol {
+  font-size: 1.5rem;
+  color: var(--accent);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 2rem;
+}
+
+.nav a {
+  text-decoration: none;
+  color: var(--primary);
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+}
+
+.nav a:hover,
+.nav a.active {
+  background: var(--accent);
+  color: white;
+}
+
+/* --- Main content --- */
+.main {
+  flex: 1;
+  padding: 2rem;
+}
+
+.main-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.main-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* --- Stats Cards --- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.card {
+  border: 1px solid var(--gray);
+  border-radius: 6px;
+  padding: 1rem;
+  text-align: center;
+  background: white;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+#login-view {
+     width: 400px;
+     height: 400px;
+}
+
+#register-view {
+     width: 400px;
+     height: 400px;
+}
+.card h3 {
+  margin-top: 0;
+  color: #444;
+  font-size: 1rem;
+}
+
+.card p {
+  font-size: 1.4rem;
+  margin: 0.5rem 0 0;
+}
+
+/* --- Transactions --- */
+.transactions h3 {
+  margin-bottom: 1rem;
+}
+
+.transactions-list {
+  border: 1px solid var(--gray);
+  border-radius: 6px;
+  padding: 1rem;
+  background: #fafafa;
+}
+
+.hidden{ 
+    display: none;
+}
+.auth-container{
+     max-width: 420px; margin: 6rem auto; padding: 2rem; 
+}
+
+.auth-container form {
+     display: grid; gap: 1rem; 
+}
+
+.auth-container label {
+     display: grid; gap: .35rem; 
+}
+
+.auth-container input, .auth-container select, .auth-container button {
+     padding: .75rem; 
+}
+.switch-form {
+     font-size: .9rem; 
+}
+
+.error {
+     color: #b00020; font-size: .9rem; 
+}
+
+.success {
+     color: #0a7f3f; font-size: .9rem; 
+}
+
+/* ---- Formulaire ---- */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem 1rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-field--wide {
+  grid-column: 1 / -1;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  border: 1px solid var(--gray, #ddd);
+  border-radius: 6px;
+  padding: 0.55rem 0.7rem;
+  font: inherit;
+  background: #fff;
+}
+
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.btn {
+  border: 1px solid var(--gray, #ddd);
+  background: #eee;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btn:hover { background: #e4e4e4; }
+
+/* Place le bloc formulaire + table dans des cartes comme sur le dashboard */
+.card {
+  border: 1px solid var(--gray, #ddd);
+  border-radius: 6px;
+  padding: 1rem;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  margin-bottom: 1.2rem;
+}
+
+/* ---- Tableau ---- */
+.table-wrap { width: 100%; overflow-x: auto; }
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+.table th, .table td {
+  padding: 0.6rem 0.7rem;
+  border-bottom: 1px solid var(--gray, #ddd);
+  text-align: left;
+  font-size: 0.95rem;
+}
+.table thead th { background: #fafafa; font-weight: 600; }
+
+.table td .row-actions {
+  display: flex; gap: 0.5rem;
+}
+.tag-income { color: #0a7; font-weight: 600; }
+.tag-expense { color: #c33; font-weight: 600; }
+
+.muted { color: #777; margin-top: 0.6rem; }
+
+/* grille de cartes (facultatif, mais joli à 2 colonnes) */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+/* --- Formulaire catégories --- */
+.cat-form {
+  display: grid;
+  grid-template-columns: 1fr 160px auto;
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+}
+.cat-input, .cat-select {
+  border: 1px solid var(--gray, #ddd);
+  border-radius: 6px;
+  padding: 0.55rem 0.7rem;
+  font: inherit;
+  background: #fff;
+}
+
+/* --- Liste de catégories --- */
+.cat-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.cat-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border: 1px solid var(--gray, #ddd);
+  border-radius: 6px;
+  padding: 0.55rem 0.7rem;
+  background: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.cat-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* badge type */
+.badge {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid var(--gray, #ddd);
+}
+.badge-income { color: #0a7; border-color: #0a7; }
+.badge-expense { color: #c33; border-color: #c33; }
+
+/* actions par ligne */
+.cat-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+.icon-btn {
+  border: 1px solid var(--gray, #ddd);
+  background: #f5f5f5;
+  border-radius: 6px;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.icon-btn:hover { background: #eee; }
+
+/* Petites utilitaires déjà utilisées sur les autres pages */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+/* Boutons & groupes */
+.btn {
+  border: 1px solid var(--gray, #ddd);
+  background: #eee;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+}
+.btn:hover { background: #e4e4e4; }
+
+.btn-danger {
+  border-color: #e3a4a4;
+  background: #f7e5e5;
+  color: #a22;
+}
+.btn-danger:hover { background: #f3d6d6; }
+
+.btn-group {
+  display: inline-flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+
+/* Formulaire profil (réutilise .form-grid / .form-field existants) */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+.form-field { display: flex; flex-direction: column; gap: .35rem; }
+.form-label { font-size: .9rem; color: #555; }
+.form-field input, .form-field select {
+  border: 1px solid var(--gray, #ddd);
+  border-radius: 6px;
+  padding: .55rem .7rem;
+  background: #fff;
+  font: inherit;
+}
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: .2rem;
+}
+
+.logout-btn {
+  margin-top: auto;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  width: 100%;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+  background-color: #c0392b;
 }
