@@ -1,13 +1,37 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Transactions – NIQO Budget</title>
-  <link rel="stylesheet" href="../css/style.css"><!-- même feuille que ton dashboard -->
+  <link rel="stylesheet" href="../css/style.css">
   <script src="../js/transactions.js" defer></script>
   <script src="../js/main.js" defer></script>
-   <script src="../js/logout.js" defer></script>
+  <script src="../js/logout.js" defer></script>
+
+  <style>
+    /* --- Scrollable transaction list --- */
+    .table-wrap {
+      max-height: 480px; /* adjust height as you like */
+      overflow-y: auto;
+      border-radius: var(--radius-lg);
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+    }
+
+    .table-wrap::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 999px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 0, 0.35);
+    }
+  </style>
 </head>
 <body>
   <div class="layout">
@@ -19,11 +43,11 @@
       <nav class="nav">
         <a href="dashboard.html">Dashboard</a>
         <a href="transactions.html" class="active" aria-current="page">Transactions</a>
-        <a href="categories.html">Catégories</a>
-        <a href="settings.html">Paramètres</a>
+        <a href="categories.html">Categories</a>
+        <a href="settings.html">Settings</a>
       </nav>
 
-      <button id="logout-btn" class="logout-btn">Déconnexion</button>
+      <button id="logout-btn" class="logout-btn">Log out</button>
     </aside>
 
     <main class="main">
@@ -31,19 +55,19 @@
         <h1>Transactions</h1>
       </header>
 
-      <!-- Carte formulaire -->
+      <!-- Transaction form card -->
       <section class="card">
         <form id="tx-form" class="form-grid">
           <label class="form-field">
             <span class="form-label">Type</span>
             <select name="type" required>
-              <option value="expense">Dépense</option>
-              <option value="income">Revenu</option>
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
             </select>
           </label>
 
           <label class="form-field">
-            <span class="form-label">Montant</span>
+            <span class="form-label">Amount</span>
             <input type="number" name="amount" step="0.01" required>
           </label>
 
@@ -53,41 +77,41 @@
           </label>
 
           <label class="form-field">
-            <span class="form-label">Catégorie</span>
+            <span class="form-label">Category</span>
             <select name="category" id="category-select" required></select>
           </label>
 
           <label class="form-field form-field--wide">
             <span class="form-label">Note</span>
-            <input type="text" name="note" placeholder="Optionnel">
+            <input type="text" name="note" placeholder="Optional">
           </label>
 
           <div class="form-actions">
-            <button type="submit" class="btn">Ajouter</button>
+            <button type="submit" class="btn">Add</button>
           </div>
         </form>
       </section>
 
-      <!-- Carte liste -->
+      <!-- Transaction list card -->
       <section class="card">
-        <h3>Liste des transactions</h3>
+        <h3>Transaction List</h3>
         <div class="table-wrap">
           <table class="table" id="tx-table">
             <thead>
               <tr>
                 <th>Date</th>
                 <th>Type</th>
-                <th>Catégorie</th>
-                <th>Montant</th>
+                <th>Category</th>
+                <th>Amount</th>
                 <th>Note</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody id="tx-tbody">
-              <!-- lignes injectées par transactions.js -->
+              <!-- rows injected by transactions.js -->
             </tbody>
           </table>
-          <p id="tx-empty" class="muted">Aucune transaction pour le moment.</p>
+          <p id="tx-empty" class="muted">No transactions yet.</p>
         </div>
       </section>
     </main>

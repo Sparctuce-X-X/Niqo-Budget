@@ -1,100 +1,134 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const LS_KEYS = { SESSION: 'niqo.session', CATS: 'niqo.categories' };
+(function () {
+  'use strict';
 
-  const getSession = () => { try { return JSON.parse(localStorage.getItem(LS_KEYS.SESSION)); } catch { return null; } };
-  const session = getSession();
-  if (!session || (!session.username && !session.guest)) { window.location.href = './login.html'; return; }
+  // ====== Constants ======
+  const LS_KEYS = Object.freeze({ SESSION: 'niqo.session', CATS: 'niqo.categories' });
+  const DEFAULT_CATS = Object.freeze({
+    expense: ['Housing', 'Food', 'Transport', 'Health', 'Subscriptions', 'Leisure', 'Shopping', 'Education', 'Taxes', 'Others'],
+    income: ['Salary', 'Freelance', 'Investments', 'Reimbursement', 'Gifts', 'Others'],
+  });
 
-  const DEFAULT_CATS = {
-    expense: ['Logement', 'Alimentation', 'Transport', 'Santé', 'Abonnements', 'Loisirs', 'Achats', 'Éducation', 'Impôts', 'Autres'],
-    income: ['Salaire', 'Freelance', 'Investissements', 'Remboursement', 'Cadeaux', 'Autres']
+  // ====== Utils ======
+  const q = (id) => document.getElementById(id);
+  const normalize = (s) => s.normalize('NFKC').trim().toLowerCase();
+  const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2));
+
+  // ====== Storage ======
+  const storage = {
+    getSession() {
+      try { return JSON.parse(localStorage.getItem(LS_KEYS.SESSION)); } catch { return null; }
+    },
+    loadCustom() {
+      try { return JSON.parse(localStorage.getItem(LS_KEYS.CATS)) ?? []; } catch { return []; }
+    },
+    saveCustom(arr) {
+      localStorage.setItem(LS_KEYS.CATS, JSON.stringify(arr));
+    },
   };
 
-  const defaultList = document.getElementById('default-cats');
-  const customList = document.getElementById('custom-cats');
-  const customEmpty = document.getElementById('custom-empty');
-  const form = document.getElementById('cat-form');
+  // ====== Rendering ======
+  function makeDefaultItem(name, type) {
+    const li = document.createElement('li');
+    li.className = 'cat-item';
+    li.innerHTML = `<span class="cat-name">${name}</span><span class="badge ${type}">${type === 'expense' ? 'Expense' : 'Income'}</span>`;
+    return li;
+  }
 
-  const loadCustom = () => { try { return JSON.parse(localStorage.getItem(LS_KEYS.CATS)) ?? []; } catch { return []; } };
-  const saveCustom = (arr) => localStorage.setItem(LS_KEYS.CATS, JSON.stringify(arr));
+  function renderDefaults(ul) {
+    if (!ul) return;
+    ul.innerHTML = '';
+    DEFAULT_CATS.expense.forEach((n) => ul.appendChild(makeDefaultItem(n, 'expense')));
+    DEFAULT_CATS.income.forEach((n) => ul.appendChild(makeDefaultItem(n, 'income')));
+  }
 
-  const renderDefaults = () => {
-    if (!defaultList) return;
-    defaultList.innerHTML = '';
-    const makeItem = (name, type) => {
-      const li = document.createElement('li');
-      li.className = 'cat-item';
-      li.innerHTML = `<span class="cat-name">${name}</span><span class="badge ${type}">${type === 'expense' ? 'Dépense' : 'Revenu'}</span>`;
-      return li;
-    };
-    DEFAULT_CATS.expense.forEach(n => defaultList.appendChild(makeItem(n, 'expense')));
-    DEFAULT_CATS.income.forEach(n => defaultList.appendChild(makeItem(n, 'income')));
-  };
-
-  const renderCustom = () => {
-    if (!customList) return;
-    const data = loadCustom();
-    customList.innerHTML = '';
-    data.forEach(item => {
+  function renderCustom(ul, emptyStateEl) {
+    if (!ul) return;
+    const data = storage.loadCustom();
+    ul.innerHTML = '';
+    data.forEach((item) => {
       const li = document.createElement('li');
       li.className = 'cat-item';
       li.dataset.id = item.id;
       li.innerHTML = `
         <span class="cat-name">${item.name}</span>
-        <span class="badge ${item.type}">${item.type === 'expense' ? 'Dépense' : 'Revenu'}</span>
-        <button class="btn btn-small cat-del" data-id="${item.id}">Supprimer</button>
+        <span class="badge ${item.type}">${item.type === 'expense' ? 'Expense' : 'Income'}</span>
+        <button class="btn btn-small cat-del" data-id="${item.id}">Delete</button>
       `;
-      customList.appendChild(li);
+      ul.appendChild(li);
     });
-    if (customEmpty) customEmpty.style.display = data.length ? 'none' : '';
-  };
+    if (emptyStateEl) emptyStateEl.style.display = data.length ? 'none' : '';
+  }
 
-  const normalize = (s) => s.normalize('NFKC').trim().toLowerCase();
-
+  // ====== Validation / Deduplication ======
   const existsInDefaults = (name, type) => {
     const n = normalize(name);
-    return (type === 'expense' ? DEFAULT_CATS.expense : DEFAULT_CATS.income).some(x => normalize(x) === n);
+    const list = type === 'expense' ? DEFAULT_CATS.expense : DEFAULT_CATS.income;
+    return list.some((x) => normalize(x) === n);
   };
 
   const existsInCustom = (name, type) => {
     const n = normalize(name);
-    return loadCustom().some(x => x.type === type && normalize(x.name) === n);
+    return storage.loadCustom().some((x) => x.type === type && normalize(x.name) === n);
   };
 
-  form?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const data = new FormData(form);
-    const name = (data.get('name') || '').toString();
-    const type = (data.get('type') || 'expense').toString();
+  // ====== Bindings ======
+  function bindForm(formEl, lists) {
+    formEl?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(formEl);
+      const name = (fd.get('name') || '').toString();
+      const type = (fd.get('type') || 'expense').toString();
 
-    if (!name || name.trim().length < 2) return;
+      if (!name || name.trim().length < 2) return;
 
-    if (existsInDefaults(name, type) || existsInCustom(name, type)) {
-      form.reset();
-      renderCustom();
+      if (existsInDefaults(name, type) || existsInCustom(name, type)) {
+        formEl.reset();
+        renderCustom(lists.customList, lists.customEmpty);
+        return;
+      }
+
+      const item = { id: uuid(), name: name.trim(), type };
+      const all = storage.loadCustom();
+      all.push(item);
+      storage.saveCustom(all);
+      formEl.reset();
+      renderCustom(lists.customList, lists.customEmpty);
+    });
+  }
+
+  function bindDelete(customListEl, lists) {
+    customListEl?.addEventListener('click', (e) => {
+      const target = e.target;
+      if (!(target instanceof HTMLElement)) return;
+      const delBtn = target.closest('.cat-del');
+      if (!delBtn) return;
+      const id = delBtn.getAttribute('data-id');
+      if (!id) return;
+      const remaining = storage.loadCustom().filter((x) => x.id !== id);
+      storage.saveCustom(remaining);
+      renderCustom(lists.customList, lists.customEmpty);
+    });
+  }
+
+  // ====== Bootstrap ======
+  document.addEventListener('DOMContentLoaded', () => {
+    // Session check (unchanged)
+    const session = storage.getSession();
+    if (!session || (!session.username && !session.guest)) {
+      window.location.href = './login.html';
       return;
     }
 
-    const item = { id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2), name: name.trim(), type };
-    const all = loadCustom();
-    all.push(item);
-    saveCustom(all);
-    form.reset();
-    renderCustom();
-  });
+    const lists = {
+      defaultList: q('default-cats'),
+      customList: q('custom-cats'),
+      customEmpty: q('custom-empty'),
+    };
 
-  customList?.addEventListener('click', (e) => {
-    const target = e.target;
-    if (!(target instanceof HTMLElement)) return;
-    const delBtn = target.closest('.cat-del');
-    if (!delBtn) return;
-    const id = delBtn.getAttribute('data-id');
-    if (!id) return;
-    const all = loadCustom().filter(x => x.id !== id);
-    saveCustom(all);
-    renderCustom();
-  });
+    renderDefaults(lists.defaultList);
+    renderCustom(lists.customList, lists.customEmpty);
 
-  renderDefaults();
-  renderCustom();
-});
+    bindForm(q('cat-form'), lists);
+    bindDelete(lists.customList, lists);
+  });
+})();

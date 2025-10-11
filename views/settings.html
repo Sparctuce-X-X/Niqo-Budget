@@ -1,13 +1,28 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Paramètres – NIQO Budget</title>
+  <title>Settings – NIQO Budget</title>
   <link rel="stylesheet" href="../css/style.css">
   <script src="../js/settings.js" defer></script>
   <script src="../js/main.js" defer></script>
-   <script src="../js/logout.js" defer></script>
+  <script src="../js/logout.js" defer></script>
+  <style>
+    /* Enhanced muted text style */
+    .muted {
+      color: var(--muted, #6b6f76);
+      font-size: 0.95rem;
+      line-height: 1.4;
+      opacity: 0.9;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+
+    .muted:hover {
+      opacity: 1;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
   <div class="layout">
@@ -19,30 +34,30 @@
       <nav class="nav">
         <a href="dashboard.html">Dashboard</a>
         <a href="transactions.html">Transactions</a>
-        <a href="categories.html">Catégories</a>
-        <a href="settings.html" class="active" aria-current="page">Paramètres</a>
+        <a href="categories.html">Categories</a>
+        <a href="settings.html" class="active" aria-current="page">Settings</a>
       </nav>
 
-      <button id="logout-btn" class="logout-btn">Déconnexion</button>
+      <button id="logout-btn" class="logout-btn">Log out</button>
     </aside>
 
     <main class="main">
       <header class="main-header">
-        <h1>Paramètres</h1>
+        <h1>Settings</h1>
       </header>
 
       <section class="cards-grid">
-        <!-- Profil -->
+        <!-- Profile -->
         <article class="card">
-          <h3>Profil</h3>
+          <h3>Profile</h3>
           <form id="profile-form" class="form-grid">
             <label class="form-field">
-              <span class="form-label">Nom</span>
+              <span class="form-label">Name</span>
               <input type="text" name="name" id="profile-name" required>
             </label>
 
             <label class="form-field">
-              <span class="form-label">Devise</span>
+              <span class="form-label">Currency</span>
               <select name="currency" id="profile-currency" required>
                 <option value="EUR">EUR (€)</option>
                 <option value="USD">USD ($)</option>
@@ -51,28 +66,17 @@
             </label>
 
             <div class="form-actions">
-              <button type="submit" class="btn">Enregistrer</button>
+              <button type="submit" class="btn">Save</button>
             </div>
           </form>
           <p id="profile-message" class="muted"></p>
         </article>
 
-        <!-- Thème -->
+        <!-- Reset -->
         <article class="card">
-          <h3>Thème</h3>
-          <div class="btn-group" style="margin-top: .6rem;">
-            <button class="btn" data-theme="light">Clair</button>
-            <button class="btn" data-theme="dark">Sombre</button>
-            <button class="btn" data-theme="auto">Auto</button>
-          </div>
-          <p class="muted" id="theme-message" style="margin-top:.6rem;"></p>
-        </article>
-
-        <!-- Réinitialisation -->
-        <article class="card">
-          <h3>Réinitialisation</h3>
-          <p class="muted">Supprime toutes les données locales (utilisateurs, transactions, catégories, session).</p>
-          <button id="reset-btn" class="btn btn-danger" style="margin-top:.6rem;">Réinitialiser</button>
+          <h3>Reset Data</h3>
+          <p class="muted">This will delete all local data (users, transactions, categories, and session).</p>
+          <button id="reset-btn" class="btn btn-danger" style="margin-top:.6rem;">Reset</button>
           <p id="reset-message" class="muted" style="margin-top:.4rem;"></p>
         </article>
       </section>

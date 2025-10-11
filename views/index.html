@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NIQO Budget – Authentification</title>
+  <title>NIQO Budget – Authentication</title>
   <link rel="stylesheet" href="../css/style.css">
   <script src="../js/auth.js" defer></script>
 </head>
@@ -11,48 +11,49 @@
 <body>
   <main class="auth-container">
     <section id="auth">
+      <!-- Login View -->
       <article id="login-view">
-        <h2>Connexion</h2>
+        <h2>Login</h2>
         <form id="login-form">
           <label>
-            <span>Nom d’utilisateur</span>
+            <span>Username</span>
             <input type="text" name="username" required>
           </label>
 
           <label>
-            <span>Mot de passe</span>
+            <span>Password</span>
             <input type="password" name="password" required>
           </label>
 
-          <button type="submit">Se connecter</button>
+          <button type="submit">Sign in</button>
           <div id="login-message" role="alert" aria-live="polite"></div>
           
           <p class="switch-form">
-            Pas encore inscrit ? 
-            <a href="#" id="show-register">Créer un compte</a>
+            Not registered yet? 
+            <a href="#" id="show-register">Create an account</a>
           </p>
 
-          <button type="button" id="guest-login">Continuer en invité</button>
+          <button type="button" id="guest-login">Continue as guest</button>
         </form>
       </article>
 
-
+      <!-- Register View -->
       <article id="register-view" class="hidden">
-        <h2>Créer un compte</h2>
+        <h2>Create an account</h2>
 
         <form id="register-form">
           <label>
-            <span>Nom d’utilisateur</span>
+            <span>Username</span>
             <input type="text" name="username" required>
           </label>
 
           <label>
-            <span>Mot de passe</span>
+            <span>Password</span>
             <input type="password" name="password" required>
           </label>
 
           <label>
-            <span>Devise</span>
+            <span>Currency</span>
             <select name="currency" required>
               <option value="EUR">EUR (€)</option>
               <option value="USD">USD ($)</option>
@@ -60,16 +61,15 @@
             </select>
           </label>
 
-          <button type="submit">Créer le compte</button>
+          <button type="submit">Register</button>
           <div id="register-message" role="alert" aria-live="polite"></div>
 
           <p class="switch-form">
-            Déjà inscrit ? 
-            <a href="#" id="show-login">Se connecter</a>
+            Already have an account? 
+            <a href="#" id="show-login">Sign in</a>
           </p>
         </form>
       </article>
-
     </section>
   </main>
 </body>

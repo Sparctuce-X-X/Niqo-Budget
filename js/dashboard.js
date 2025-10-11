@@ -1,95 +1,139 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const session = JSON.parse(localStorage.getItem('niqo.session'));
-  if (!session || (!session.username && !session.guest)) {
-    window.location.href = './login.html';
-    return;
-  }
+(function () {
+  'use strict';
 
-  const storageKey = `transactions_${session.username || 'guest'}`;
-  const transactions = JSON.parse(localStorage.getItem(storageKey)) || [];
-  const currency = session.currency || 'EUR';
+  // ========= Utilities =========
+  const q = (id) => document.getElementById(id);
+  const safeParse = (raw, fallback = null) => {
+    try { return raw == null ? fallback : JSON.parse(raw); } catch { return fallback; }
+  };
 
-  const balanceEl = document.getElementById('balance');
-  const incomeEl = document.getElementById('income');
-  const expensesEl = document.getElementById('expenses');
-  const txListEl = document.getElementById('transactions-list');
-  const chartCanvas = document.getElementById('chart');
-  const monthEl = document.getElementById('current-month');
-
-  const fmt = new Intl.NumberFormat(undefined, { style: 'currency', currency });
-
-  const now = new Date();
-  const monthLabel = now.toLocaleString('fr-FR', { month: 'long', year: 'numeric' });
-  if (monthEl) monthEl.textContent = monthLabel.charAt(0).toUpperCase() + monthLabel.slice(1);
-
-  const monthlyTx = transactions.filter(tx => {
-    const d = new Date(tx.date);
-    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-  });
-
-  const income = monthlyTx
-    .filter(tx => tx.type === 'income')
-    .reduce((sum, tx) => sum + parseFloat(tx.amount || 0), 0);
-
-  const expenses = monthlyTx
-    .filter(tx => tx.type === 'expense')
-    .reduce((sum, tx) => sum + parseFloat(tx.amount || 0), 0);
-
-  const balance = income - expenses;
-
-  if (balanceEl) balanceEl.textContent = fmt.format(balance);
-  if (incomeEl) incomeEl.textContent = fmt.format(income);
-  if (expensesEl) expensesEl.textContent = fmt.format(expenses);
-
-  const recent = [...monthlyTx].reverse().slice(0, 5);
-  if (txListEl) {
-    txListEl.innerHTML = '';
-    if (recent.length === 0) {
-      txListEl.innerHTML = '<p>Aucune transaction récente</p>';
-    } else {
-      recent.forEach(tx => {
-        const item = document.createElement('div');
-        item.className = 'tx-item';
-        item.innerHTML = `
-          <div class="tx-info">
-            <strong>${tx.category}</strong>
-            <span class="tx-date">${tx.date}</span>
-          </div>
-          <div class="tx-amount ${tx.type === 'expense' ? 'negative' : 'positive'}">
-            ${tx.type === 'expense' ? '-' : '+'}${fmt.format(parseFloat(tx.amount || 0))}
-          </div>
-        `;
-        txListEl.appendChild(item);
-      });
+  // ========= Formatting =========
+  function makeFormatter(currency) {
+    try {
+      return new Intl.NumberFormat(undefined, { style: 'currency', currency });
+    } catch {
+      // Simple fallback if currency code is invalid
+      return { format: (n) => `${n.toFixed(2)} ${currency || 'EUR'}` };
     }
   }
 
-  if (chartCanvas && typeof Chart !== 'undefined') {
-    const expenseData = {};
-    monthlyTx.filter(tx => tx.type === 'expense').forEach(tx => {
-      expenseData[tx.category] = (expenseData[tx.category] || 0) + parseFloat(tx.amount || 0);
+  // ========= Rendering =========
+  function setText(el, value) { if (el) el.textContent = value; }
+
+  function monthLabelEN(date) {
+    const label = date.toLocaleString('en', { month: 'long', year: 'numeric' });
+    return label.charAt(0).toUpperCase() + label.slice(1);
+  }
+
+  function sameMonth(a, b) { return a.getMonth() === b.getMonth() && a.getFullYear() === b.getFullYear(); }
+
+  function summarizeMonth(txList, now) {
+    const monthlyTx = txList.filter((tx) => {
+      const d = new Date(tx.date);
+      return sameMonth(d, now);
     });
+
+    const sum = (type) => monthlyTx
+      .filter((tx) => tx.type === type)
+      .reduce((acc, tx) => acc + parseFloat(tx.amount || 0), 0);
+
+    return { monthlyTx, income: sum('income'), expenses: sum('expense') };
+  }
+
+  function renderKPIs({ balanceEl, incomeEl, expensesEl }, { income, expenses }, fmt) {
+    const balance = income - expenses;
+    setText(balanceEl, fmt.format(balance));
+    setText(incomeEl, fmt.format(income));
+    setText(expensesEl, fmt.format(expenses));
+  }
+
+  function renderRecent(listEl, monthlyTx, fmt) {
+    if (!listEl) return;
+    const recent = [...monthlyTx].reverse().slice(0, 5);
+    listEl.innerHTML = '';
+
+    if (recent.length === 0) {
+      listEl.innerHTML = '<p>No recent transactions</p>';
+      return;
+    }
+
+    recent.forEach((tx) => {
+      const item = document.createElement('div');
+      item.className = 'tx-item';
+      const sign = tx.type === 'expense' ? '-' : '+';
+      const cls = tx.type === 'expense' ? 'negative' : 'positive';
+      item.innerHTML = `
+        <div class="tx-info">
+          <strong>${tx.category}</strong>
+          <span class="tx-date">${tx.date}</span>
+        </div>
+        <div class="tx-amount ${cls}">
+          ${sign}${fmt.format(parseFloat(tx.amount || 0))}
+        </div>
+      `;
+      listEl.appendChild(item);
+    });
+  }
+
+  function renderChart(canvas, monthlyTx) {
+    if (!canvas || typeof Chart === 'undefined') return;
+
+    const expenseData = {};
+    monthlyTx
+      .filter((tx) => tx.type === 'expense')
+      .forEach((tx) => {
+        const key = tx.category;
+        expenseData[key] = (expenseData[key] || 0) + parseFloat(tx.amount || 0);
+      });
 
     const categories = Object.keys(expenseData);
     const values = Object.values(expenseData);
+    if (categories.length === 0) return;
 
-    if (categories.length > 0) {
-      new Chart(chartCanvas, {
-        type: 'doughnut',
-        data: {
-          labels: categories,
-          datasets: [{
-            data: values,
-            backgroundColor: [
-              '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
-            ],
-          }]
-        },
-        options: {
-          plugins: { legend: { position: 'bottom' } },
-          responsive: true
-        }
-      });
-    }
+    // Keep exactly the same options/colors as the original
+    new Chart(canvas, {
+      type: 'doughnut',
+      data: {
+        labels: categories,
+        datasets: [{
+          data: values,
+          backgroundColor: [
+            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40',
+          ],
+        }],
+      },
+      options: { plugins: { legend: { position: 'bottom' } }, responsive: true },
+    });
   }
-});
+
+  // ========= Bootstrap =========
+  document.addEventListener('DOMContentLoaded', () => {
+    const session = safeParse(localStorage.getItem('niqo.session'));
+    if (!session || (!session.username && !session.guest)) {
+      window.location.href = './login.html';
+      return;
+    }
+
+    const storageKey = `transactions_${session.username || 'guest'}`;
+    const transactions = safeParse(localStorage.getItem(storageKey), []) || [];
+    const currency = session.currency || 'EUR';
+
+    const fmt = makeFormatter(currency);
+    const now = new Date();
+
+    // DOM selectors
+    const balanceEl = q('balance');
+    const incomeEl = q('income');
+    const expensesEl = q('expenses');
+    const txListEl = q('transactions-list');
+    const chartCanvas = q('chart');
+    const monthEl = q('current-month');
+
+    setText(monthEl, monthLabelEN(now));
+
+    const summary = summarizeMonth(transactions, now);
+    renderKPIs({ balanceEl, incomeEl, expensesEl }, summary, fmt);
+    renderRecent(txListEl, summary.monthlyTx, fmt);
+    renderChart(chartCanvas, summary.monthlyTx);
+  });
+})();
