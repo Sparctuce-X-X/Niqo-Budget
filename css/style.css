@@ -1,392 +1,746 @@
-:root {
-  --bg: #ffffff;
-  --text: #222;
-  --primary: #333;
-  --gray: #ddd;
-  --accent: #0077ff;
+/* ========= THEME ========= */
+:root{
+  --bg: #f7e9ef;               /* rose poudré du fond */
+  --bg-grad-a:#f7e9ef;
+  --bg-grad-b:#f3eef6;         /* léger dégradé rosé/lilas */
+  --surface:#ffffff;           /* cartes */
+  --text:#1d1e20;
+  --muted:#6b6f76;
+
+  --accent:#e94f9b;            /* rose soutenu pour CTA/actif */
+  --accent-2:#7a5af8;          /* violet pour petits graph/hover */
+  --accent-soft:#fde3ef;       /* fond badges/hover doux */
+
+  --line:#ececf2;              /* bordures subtiles */
+
+  --radius-lg: 18px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+
+  --shadow-1: 0 8px 24px rgba(16, 24, 40, .06);
+  --shadow-2: 0 2px 10px rgba(16, 24, 40, .08);
+
+  --transition: .18s ease;
 }
 
-body {
-  margin: 0;
-  font-family: system-ui, sans-serif;
-  background: var(--bg);
+/* ========= RESET DE PAGE ========= */
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
   color: var(--text);
-  height: 100vh;
-  display: flex;
+  background:
+    radial-gradient(1200px 800px at 85% -10%, var(--bg-grad-b), transparent 60%),
+    radial-gradient(900px 600px at -10% 20%, var(--bg-grad-b), transparent 55%),
+    linear-gradient(180deg, var(--bg-grad-a), var(--bg-grad-b));
+  display:flex;
 }
 
-.layout {
-  display: flex;
+/* ========= LAYOUT ========= */
+.layout{display:flex; width:100%}
+
+/* ========= SIDEBAR ========= */
+.sidebar{
+  width: 248px;
+  background: #0f1115; /* sombre, presque noir bleuté */
+  color: #cfd3da;
+  padding: 28px 18px;
+  display:flex; flex-direction:column; gap:28px;
+  border-right: 1px solid rgba(255,255,255,.06);
+}
+
+.logo{
+  display:flex; align-items:center; gap:.65rem;
+  font-weight:700; letter-spacing:.2px; color:#fff;
+}
+.logo-symbol{
+  width:34px; height:34px; border-radius:10px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  display:grid; place-items:center; color:#fff; font-weight:800;
+  box-shadow: 0 10px 22px rgba(233,79,155,.25);
+}
+
+.nav{display:flex; flex-direction:column; gap:.5rem; margin-top:.25rem}
+.nav a{
+  text-decoration:none;
+  color:#cfd3da;
+  padding:10px 12px;
+  border-radius:12px;
+  display:flex; align-items:center; gap:.6rem;
+  transition:background var(--transition), color var(--transition), transform var(--transition);
+}
+.nav a:hover{ background: rgba(255,255,255,.06); color:#fff; transform: translateX(2px); }
+.nav a.active{
+  background: linear-gradient(135deg, rgba(233,79,155,.22), rgba(122,90,248,.22));
+  color:#fff;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+}
+
+.logout-btn{
+  margin-top:auto; width:100%;
+  background: rgba(255,255,255,.06);
+  color:#fff; border:1px solid rgba(255,255,255,.12);
+  padding:12px 14px; border-radius:12px; cursor:pointer; font-weight:700;
+  transition: transform var(--transition), background var(--transition);
+}
+.logout-btn:hover{ background: rgba(255,255,255,.1); transform: translateY(-1px); }
+
+/* ========= MAIN ========= */
+.main{ flex:1; padding:28px 32px 40px; }
+.main-header{
+  display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:22px;
+}
+.main-header h1{ margin:0; font-size:1.55rem; font-weight:800; letter-spacing:.2px;}
+.subtitle{ color: var(--muted); font-size:.95rem; }
+
+/* ========= STATS CARDS ========= */
+.stats{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap:16px; margin-bottom:22px;
+}
+.card{
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  box-shadow: var(--shadow-1);
+}
+.card h3{ margin:0 0 6px; font-size:.95rem; color:#3a3d45; font-weight:700; }
+.card p{ margin:.25rem 0 0; font-size:1.6rem; font-weight:800; letter-spacing:.2px; }
+
+/* petites variantes pour “carte bancaire / widget” */
+.card--elev{
+  background:
+    linear-gradient(180deg, #fff, #fff),
+    radial-gradient(700px 280px at 80% -30%, rgba(233,79,155,.18), transparent 60%),
+    radial-gradient(600px 260px at -10% 140%, rgba(122,90,248,.18), transparent 60%);
+  background-blend-mode: normal, screen, screen;
+  border: 1px solid rgba(233,79,155,.15);
+  box-shadow: 0 20px 40px rgba(122,90,248,.08), var(--shadow-1);
+}
+
+/* ========= TRANSACTIONS ========= */
+.transactions h3{ margin: 6px 0 10px; }
+.transactions-list{
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  box-shadow: var(--shadow-2);
+}
+
+/* ========= FORMULAIRES ========= */
+.auth-container{ max-width: 440px; margin: 5rem auto; padding: 24px; }
+.auth-container form{ display:grid; gap: 14px; }
+.auth-container label{ display:grid; gap:6px; }
+.auth-container input,
+.auth-container select,
+.auth-container textarea,
+.auth-container button{
+  padding: 12px 14px; border-radius: 12px; border:1px solid var(--line); background:#fff; font:inherit;
+  transition: box-shadow var(--transition), border-color var(--transition);
+}
+.auth-container input:focus,
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus{
+  outline:none; border-color: rgba(122,90,248,.45);
+  box-shadow: 0 0 0 4px rgba(122,90,248,.14);
+}
+
+.switch-form{ font-size:.93rem; color:var(--muted); }
+.error{ color:#b00020; font-size:.92rem; }
+.success{ color:#0a7f3f; font-size:.92rem; }
+
+.form-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap: 14px;
+}
+.form-field{ display:flex; flex-direction:column; gap:8px; }
+.form-label{ font-size:.7rem; color:#545861; }
+.form-field--wide{ grid-column: 1 / -1; }
+.form-actions{ grid-column: 1 / -1; display:flex; justify-content:flex-end; margin-top: .25rem; }
+
+.btn{
+  border:1px solid var(--line); background: #fff;
+  padding: .75rem 1rem; border-radius: 12px; cursor:pointer; font-weight:700;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+}
+.btn:hover{ transform: translateY(-1px); box-shadow: var(--shadow-2); }
+.btn-danger{ border-color:#ffd2dc; background:#ffe8ef; color:#b21e49; }
+.btn-danger:hover{ background:#ffe1ea; }
+
+/* ========= TABLE ========= */
+.table-wrap{ width:100%; overflow-x:auto; }
+.table{
+  width:100%; border-collapse: collapse; min-width: 760px; background: var(--surface);
+  border:1px solid var(--line); border-radius: var(--radius-lg); overflow:hidden;
+  box-shadow: var(--shadow-2);
+}
+.table thead th{
+  background: #fafafb; font-weight:700; font-size:.92rem; color:#444;
+  border-bottom:1px solid var(--line);
+}
+.table th, .table td{ padding: 12px 14px; text-align:left; border-bottom:1px solid var(--line); }
+.table tr:hover td{ background:#fcfbfe; }
+.table td .row-actions{ display:flex; gap:.5rem; }
+
+.tag-income{ color:#119c6b; font-weight:700; }
+.tag-expense{ color:#d64545; font-weight:700; }
+.muted{ color: var(--muted); margin-top:.55rem; }
+
+/* ========= CATEGORIES ========= */
+.cat-form{
+  display:grid; grid-template-columns: 1fr 180px auto; gap:.6rem; margin-bottom:.8rem;
+}
+.cat-input,.cat-select{ border:1px solid var(--line); border-radius:12px; padding:.6rem .7rem; background:#fff; }
+
+.cat-list{ list-style:none; padding:0; margin:0; }
+.cat-list li{
+  display:flex; align-items:center; justify-content:space-between; gap:.75rem;
+  border:1px solid var(--line); border-radius:14px; padding:.6rem .75rem; background:#fff; margin-bottom:.5rem;
+  box-shadow: var(--shadow-2);
+}
+.cat-name{ display:flex; align-items:center; gap:.5rem; }
+
+.badge{
+  font-size:.78rem; padding:.18rem .5rem; border-radius:999px; border:1px solid var(--line); background: var(--accent-soft);
+}
+.badge-income{ color:#0a7; border-color:#bfe9d7; background:#e9fbf5; }
+.badge-expense{ color:#c33; border-color:#ffd2dc; background:#ffeaf1; }
+
+.cat-actions{ display:flex; gap:.4rem; }
+.icon-btn{
+  border:1px solid var(--line); background:#fafafb; border-radius:10px; padding:.38rem .6rem; font-size:.92rem; cursor:pointer;
+  transition: background var(--transition), transform var(--transition);
+}
+.icon-btn:hover{ background:#fff; transform: translateY(-1px); }
+
+/* ========= GRIDS ========= */
+.cards-grid{
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap:16px;
+}
+
+/* ========= UTILITAIRES ========= */
+.hidden{ display:none; }
+#login-view,#register-view{ width:400px; height:400px; }
+
+/* ========= CHART-LIKE MINI BARS (optionnel) ========= */
+.mini-bars{
+  height:54px; display:flex; align-items:flex-end; gap:6px;
+}
+.mini-bars span{
+  display:block; width:6px; border-radius:6px;
+  background: linear-gradient(180deg, var(--accent-2), var(--accent));
+  box-shadow: 0 6px 14px rgba(122,90,248,.25);
+}
+
+/* === TX FORM IN CARD (override ciblé) ===================== */
+.card #tx-form.form-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin: 4px 0;
+}
+
+.card #tx-form .form-field{
+  display:flex;
+  flex-direction:column;
+  gap: 8px;
+}
+
+.card #tx-form .form-label{
+  font-size:.9rem;
+  color: var(--muted, #6b6f76);
+  font-weight: 600;
+}
+
+/* Forcer le style des champs dans ce card */
+.card #tx-form input,
+.card #tx-form select{
+  width: 100%;
+  appearance: none;
+  border: 1px solid var(--line, #ececf2);
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font: inherit;
+  color: var(--text, #1d1e20);
+  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+/* Icône de dropdown douce (optionnel) */
+.card #tx-form select{
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted, #6b6f76) 50%),
+    linear-gradient(135deg, var(--muted, #6b6f76) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) calc(50% - 3px),
+    calc(100% - 12px) calc(50% - 3px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 40px;
+}
+
+.card #tx-form input:focus,
+.card #tx-form select:focus{
+  outline: none;
+  border-color: rgba(122,90,248,.45);               /* var(--accent-2) */
+  box-shadow: 0 0 0 4px rgba(122,90,248,.14);
+}
+
+/* Champ "Note" sur toute la ligne */
+.card #tx-form .form-field--wide{ grid-column: 1 / -1; }
+
+/* Zone d’actions alignée à droite */
+.card #tx-form .form-actions{
+  grid-column: 1 / -1;
+  display:flex;
+  justify-content:flex-end;
+  margin-top: 2px;
+}
+
+/* Bouton Ajouter (accent rosé) */
+.card #tx-form .btn{
+  border: 1px solid var(--line, #ececf2);
+  background: linear-gradient(135deg, var(--accent, #e94f9b), var(--accent-2, #7a5af8));
+  color:#fff;
+  padding: .8rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+  box-shadow: 0 8px 20px rgba(122,90,248,.18);
+}
+.card #tx-form .btn:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(122,90,248,.22);
+  filter: brightness(1.02);
+}
+
+/* Petits états:
+   – input number sans flèches WebKit
+   – dates cohérentes
+*/
+.card #tx-form input[type="number"]::-webkit-outer-spin-button,
+.card #tx-form input[type="number"]::-webkit-inner-spin-button{
+  -webkit-appearance: none;
+  margin: 0;
+}
+.card #tx-form input[type="number"]{ -moz-appearance: textfield; }
+
+.card #tx-form input[type="date"]{
+  color-scheme: light;
+}
+
+/* Responsive resserré si très étroit */
+@media (max-width: 520px){
+  .card #tx-form.form-grid{
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ================== PARAMÈTRES (settings.html) ================== */
+
+/* Grille de cartes */
+.main .cards-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+}
+
+/* Cartes Paramètres */
+.main .card{
+  background: var(--surface, #fff);
+  border: 1px solid var(--line, #ececf2);
+  border-radius: var(--radius-lg, 18px);
+  padding: 18px 18px 16px;
+  box-shadow: var(--shadow-1, 0 8px 24px rgba(16,24,40,.06));
+}
+
+.main .card h3{
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #3a3d45;
+}
+
+/* ---------- Formulaire Profil ---------- */
+#profile-form.form-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-top: 6px;
+}
+
+#profile-form .form-field{
+  display:flex; flex-direction:column; gap:8px;
+}
+
+#profile-form .form-label{
+  font-size:.9rem; color: var(--muted, #6b6f76); font-weight: 600;
+}
+
+#profile-form input,
+#profile-form select{
+  width: 100%;
+  appearance: none;
+  border: 1px solid var(--line, #ececf2);
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font: inherit;
+  color: var(--text, #1d1e20);
+  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+#profile-form select{
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted, #6b6f76) 50%),
+    linear-gradient(135deg, var(--muted, #6b6f76) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) calc(50% - 3px),
+    calc(100% - 12px) calc(50% - 3px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 40px;
+}
+
+#profile-form input:focus,
+#profile-form select:focus{
+  outline: none;
+  border-color: rgba(122,90,248,.45);
+  box-shadow: 0 0 0 4px rgba(122,90,248,.14);
+}
+
+#profile-form .form-actions{
+  grid-column: 1 / -1;
+  display:flex; justify-content:flex-end; margin-top: 2px;
+}
+
+/* Bouton Enregistrer (accent thème) */
+#profile-form .btn{
+  border: 1px solid var(--line, #ececf2);
+  background: linear-gradient(135deg, var(--accent, #e94f9b), var(--accent-2, #7a5af8));
+  color:#fff;
+  padding: .8rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 700; cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+  box-shadow: 0 8px 20px rgba(122,90,248,.18);
+}
+#profile-form .btn:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(122,90,248,.22);
+  filter: brightness(1.02);
+}
+
+/* Messages */
+#profile-message,
+#reset-message{ color: var(--muted, #6b6f76); }
+
+/* ---------- Bloc Réinitialisation ---------- */
+#reset-btn.btn{
+  border-color:#ffd2dc;
+  background:#ffe8ef;
+  color:#b21e49;
+  font-weight: 800;
+  border-radius: 12px;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+#reset-btn.btn:hover{
+  background:#ffe1ea;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(178,30,73,.12);
+}
+
+/* ---------- Sidebar : lien actif via aria-current ---------- */
+.nav a[aria-current="page"],
+.nav a.active{
+  background: linear-gradient(135deg, rgba(233,79,155,.22), rgba(122,90,248,.22));
+  color:#fff;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+}
+
+/* ---------- Responsive serré ---------- */
+@media (max-width: 560px){
+  .main .cards-grid{ grid-template-columns: 1fr; }
+  #profile-form.form-grid{ grid-template-columns: 1fr; }
+}
+
+
+#profile-form .form-field input {
+  box-sizing: border-box;
+}
+
+
+/* Liste "Catégories par défaut" scrollable dans la carte */
+#default-cats{
+  max-height: calc(100vh - 260px); /* ajuste si besoin */
+  overflow-y: auto;
+  padding-right: 6px;              /* petit espace pour la scrollbar */
+}
+
+/* Scrollbar fine (facultatif) */
+#default-cats::-webkit-scrollbar{ width: 8px; }
+#default-cats::-webkit-scrollbar-track{ background: transparent; }
+#default-cats::-webkit-scrollbar-thumb{
+  background: rgba(0,0,0,.12);
+  border-radius: 999px;
+}
+#default-cats:hover::-webkit-scrollbar-thumb{ background: rgba(0,0,0,.22); }
+
+/* Transactions: limiter la largeur des 4 champs de tête */
+#tx-form.form-grid{
+  grid-template-columns: 140px 160px 170px 220px; /* Type, Montant, Date, Catégorie */
+  gap: 14px;
+  align-items: end;
+}
+
+/* éviter que les inputs s'étirent au-delà de leur colonne */
+#tx-form .form-field{ min-width: 0; }
+#tx-form select[name="type"]{ width:100%; max-width:140px; }
+#tx-form input[name="amount"]{ width:100%; max-width:160px; }
+#tx-form input[name="date"]{ width:100%; max-width:170px; }
+#tx-form select[name="category"]{ width:100%; max-width:220px; }
+
+/* la ligne "Note" reste pleine largeur comme prévu */
+#tx-form .form-field--wide{ grid-column: 1 / -1; }
+
+/* responsive : repasse en une colonne sur petit écran */
+@media (max-width: 640px){
+  #tx-form.form-grid{ grid-template-columns: 1fr; }
+  #tx-form select[name="type"],
+  #tx-form input[name="amount"],
+  #tx-form input[name="date"],
+  #tx-form select[name="category"]{ max-width: 100%; }
+}
+
+/* --- Ajuste la largeur des champs dans le formulaire des transactions --- */
+#tx-form.form-grid {
+  grid-template-columns: 140px 140px 160px 200px; /* Type, Montant, Date, Catégorie */
+  gap: 14px;
+  align-items: end;
+}
+
+#tx-form .form-field { min-width: 0; }
+
+/* Réduit la largeur de tous les champs du haut */
+#tx-form select[name="type"],
+#tx-form input[name="amount"],
+#tx-form input[name="date"],
+#tx-form select[name="category"] {
+  width: 100%;
+  max-width: 200px;
+}
+
+/* Champ "Note" plus court également */
+#tx-form input[name="note"] {
+  max-width: 400px;
+}
+
+/* Ligne "Note" prend toute la largeur */
+#tx-form .form-field--wide {
+  grid-column: 1 / -1;
+}
+
+/* Espace entre la carte formulaire et la carte liste */
+#tx-form {
+  margin-bottom: 1.6rem; /* espace vertical */
+}
+
+/* ou pour être plus précis */
+.card + .card {
+  margin-top: 1.6rem; /* ajoute un espace entre deux cartes successives */
+}
+
+/* Responsive : repasse en une seule colonne sur mobile */
+@media (max-width: 640px) {
+  #tx-form.form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #tx-form select[name="type"],
+  #tx-form input[name="amount"],
+  #tx-form input[name="date"],
+  #tx-form select[name="category"],
+  #tx-form input[name="note"] {
+    max-width: 100%;
+  }
+}
+
+/* --- Bouton "Supprimer" dans les actions de ligne --- */
+.icon-btn.delete-btn,
+.btn-delete,
+.row-actions .btn-delete {
+  border: 1px solid #ffd2dc;
+  background: #ffe8ef;
+  color: #b21e49;
+  border-radius: 10px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+/* Effet hover */
+.icon-btn.delete-btn:hover,
+.btn-delete:hover,
+.row-actions .btn-delete:hover {
+  background: #ffe1ea;
+  box-shadow: 0 4px 10px rgba(178, 30, 73, 0.15);
+  transform: translateY(-1px);
+}
+
+/* Effet click */
+.icon-btn.delete-btn:active,
+.btn-delete:active,
+.row-actions .btn-delete:active {
+  background: #ffd6df;
+  transform: translateY(0);
+}
+
+/* (Optionnel) version avec icône poubelle uniquement */
+.icon-btn.delete-btn i {
+  font-size: 1rem;
+  vertical-align: middle;
+  color: #b21e49;
+}
+
+/* --- Harmonise la largeur des 4 premières colonnes du formulaire --- */
+#tx-form.form-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 colonnes égales */
+  gap: 14px;
+  align-items: end;
+}
+
+/* Empêche les inputs de dépasser leur colonne */
+#tx-form .form-field {
+  min-width: 0;
+}
+
+/* Tous les champs prennent 100% de la colonne */
+#tx-form select[name="type"],
+#tx-form input[name="amount"],
+#tx-form input[name="date"],
+#tx-form select[name="category"] {
   width: 100%;
 }
 
-/* --- Sidebar --- */
-.sidebar {
-  background: #f8f8f8;
-  border-right: 1px solid var(--gray);
-  padding: 2rem 1rem;
-  width: 220px;
+/* Le champ "Note" reste large sur toute la ligne */
+#tx-form .form-field--wide {
+  grid-column: 1 / -1;
+}
 
-  /* nouvelle disposition */
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2rem; /* espace entre logo et nav */
+/* Espace entre la carte du formulaire et la carte liste */
+.card + .card {
+  margin-top: 1.6rem;
+}
+
+/* Responsive : une seule colonne sur mobile */
+@media (max-width: 640px) {
+  #tx-form.form-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
-.logo-symbol {
-  font-size: 1.5rem;
-  color: var(--accent);
-}
-
-.nav {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
+/* ========= DASHBOARD : Dernières transactions ========= */
+.transactions {
   margin-top: 2rem;
 }
 
-.nav a {
-  text-decoration: none;
-  color: var(--primary);
-  padding: 0.5rem 0.8rem;
-  border-radius: 4px;
+.transactions h3 {
+  margin-bottom: .8rem;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #3a3d45;
 }
 
-.nav a:hover,
-.nav a.active {
-  background: var(--accent);
-  color: white;
-}
-
-/* --- Main content --- */
-.main {
-  flex: 1;
-  padding: 2rem;
-}
-
-.main-header {
+/* Bloc contenant la liste */
+.transactions-list {
+  background: var(--surface, #fff);
+  border: 1px solid var(--line, #ececf2);
+  border-radius: var(--radius-lg, 18px);
+  padding: 16px 18px;
+  box-shadow: var(--shadow-2, 0 2px 10px rgba(16, 24, 40, .08));
+  min-height: 100px;
   display: flex;
-  align-items: baseline;
+  flex-direction: column;
+  gap: .6rem;
+  overflow-y: auto;
+}
+
+/* Scrollbar fine pour la liste */
+.transactions-list::-webkit-scrollbar {
+  width: 8px;
+}
+.transactions-list::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.12);
+  border-radius: 999px;
+}
+.transactions-list:hover::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.25);
+}
+
+/* Ligne de transaction */
+.transactions-list .tx-item {
+  display: flex;
   justify-content: space-between;
-  margin-bottom: 2rem;
+  align-items: center;
+  padding: .65rem .85rem;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid var(--line, #ececf2);
+  box-shadow: var(--shadow-1, 0 8px 24px rgba(16,24,40,.06));
+  transition: transform .15s ease, box-shadow .15s ease;
 }
 
-.main-header h1 {
-  margin: 0;
-  font-size: 1.5rem;
+.transactions-list .tx-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(122,90,248,.1);
 }
 
-.subtitle {
-  font-size: 0.9rem;
-  color: #666;
+/* Info de gauche */
+.tx-item .tx-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
-/* --- Stats Cards --- */
-.stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
+.tx-item .tx-info .tx-category {
+  font-weight: 600;
+  color: var(--text);
 }
 
-.card {
-  border: 1px solid var(--gray);
-  border-radius: 6px;
-  padding: 1rem;
-  text-align: center;
-  background: white;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+.tx-item .tx-info .tx-date {
+  font-size: .85rem;
+  color: var(--muted);
 }
 
-#login-view {
-     width: 400px;
-     height: 400px;
-}
-
-#register-view {
-     width: 400px;
-     height: 400px;
-}
-.card h3 {
-  margin-top: 0;
-  color: #444;
+/* Montant à droite */
+.tx-item .tx-amount {
+  font-weight: 800;
   font-size: 1rem;
 }
 
-.card p {
-  font-size: 1.4rem;
-  margin: 0.5rem 0 0;
+.tx-item.income .tx-amount {
+  color: #119c6b;
 }
 
-/* --- Transactions --- */
-.transactions h3 {
-  margin-bottom: 1rem;
+.tx-item.expense .tx-amount {
+  color: #d64545;
 }
 
-.transactions-list {
-  border: 1px solid var(--gray);
-  border-radius: 6px;
-  padding: 1rem;
-  background: #fafafa;
-}
-
-.hidden{ 
-    display: none;
-}
-.auth-container{
-     max-width: 420px; margin: 6rem auto; padding: 2rem; 
-}
-
-.auth-container form {
-     display: grid; gap: 1rem; 
-}
-
-.auth-container label {
-     display: grid; gap: .35rem; 
-}
-
-.auth-container input, .auth-container select, .auth-container button {
-     padding: .75rem; 
-}
-.switch-form {
-     font-size: .9rem; 
-}
-
-.error {
-     color: #b00020; font-size: .9rem; 
-}
-
-.success {
-     color: #0a7f3f; font-size: .9rem; 
-}
-
-/* ---- Formulaire ---- */
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem 1rem;
-}
-
-.form-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.form-field--wide {
-  grid-column: 1 / -1;
-}
-
-.form-label {
-  font-size: 0.9rem;
-  color: #555;
-}
-
-.form-field input,
-.form-field select,
-.form-field textarea {
-  border: 1px solid var(--gray, #ddd);
-  border-radius: 6px;
-  padding: 0.55rem 0.7rem;
-  font: inherit;
-  background: #fff;
-}
-
-.form-actions {
-  grid-column: 1 / -1;
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 0.5rem;
-}
-
-.btn {
-  border: 1px solid var(--gray, #ddd);
-  background: #eee;
-  padding: 0.6rem 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-}
-.btn:hover { background: #e4e4e4; }
-
-/* Place le bloc formulaire + table dans des cartes comme sur le dashboard */
-.card {
-  border: 1px solid var(--gray, #ddd);
-  border-radius: 6px;
-  padding: 1rem;
-  background: #fff;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-  margin-bottom: 1.2rem;
-}
-
-/* ---- Tableau ---- */
-.table-wrap { width: 100%; overflow-x: auto; }
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 640px;
-}
-.table th, .table td {
-  padding: 0.6rem 0.7rem;
-  border-bottom: 1px solid var(--gray, #ddd);
-  text-align: left;
-  font-size: 0.95rem;
-}
-.table thead th { background: #fafafa; font-weight: 600; }
-
-.table td .row-actions {
-  display: flex; gap: 0.5rem;
-}
-.tag-income { color: #0a7; font-weight: 600; }
-.tag-expense { color: #c33; font-weight: 600; }
-
-.muted { color: #777; margin-top: 0.6rem; }
-
-/* grille de cartes (facultatif, mais joli à 2 colonnes) */
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1rem;
-}
-
-/* --- Formulaire catégories --- */
-.cat-form {
-  display: grid;
-  grid-template-columns: 1fr 160px auto;
-  gap: 0.6rem;
-  margin-bottom: 0.8rem;
-}
-.cat-input, .cat-select {
-  border: 1px solid var(--gray, #ddd);
-  border-radius: 6px;
-  padding: 0.55rem 0.7rem;
-  font: inherit;
-  background: #fff;
-}
-
-/* --- Liste de catégories --- */
-.cat-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.cat-list li {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  border: 1px solid var(--gray, #ddd);
-  border-radius: 6px;
-  padding: 0.55rem 0.7rem;
-  background: #fff;
-  margin-bottom: 0.5rem;
-}
-
-.cat-name {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-/* badge type */
-.badge {
-  font-size: 0.75rem;
-  padding: 0.15rem 0.45rem;
-  border-radius: 999px;
-  border: 1px solid var(--gray, #ddd);
-}
-.badge-income { color: #0a7; border-color: #0a7; }
-.badge-expense { color: #c33; border-color: #c33; }
-
-/* actions par ligne */
-.cat-actions {
-  display: flex;
-  gap: 0.4rem;
-}
-.icon-btn {
-  border: 1px solid var(--gray, #ddd);
-  background: #f5f5f5;
-  border-radius: 6px;
-  padding: 0.35rem 0.55rem;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-.icon-btn:hover { background: #eee; }
-
-/* Petites utilitaires déjà utilisées sur les autres pages */
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
-}
-
-/* Boutons & groupes */
-.btn {
-  border: 1px solid var(--gray, #ddd);
-  background: #eee;
-  padding: 0.6rem 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font: inherit;
-}
-.btn:hover { background: #e4e4e4; }
-
-.btn-danger {
-  border-color: #e3a4a4;
-  background: #f7e5e5;
-  color: #a22;
-}
-.btn-danger:hover { background: #f3d6d6; }
-
-.btn-group {
-  display: inline-flex;
-  gap: .5rem;
-  flex-wrap: wrap;
-}
-
-/* Formulaire profil (réutilise .form-grid / .form-field existants) */
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-}
-.form-field { display: flex; flex-direction: column; gap: .35rem; }
-.form-label { font-size: .9rem; color: #555; }
-.form-field input, .form-field select {
-  border: 1px solid var(--gray, #ddd);
-  border-radius: 6px;
-  padding: .55rem .7rem;
-  background: #fff;
-  font: inherit;
-}
-.form-actions {
-  grid-column: 1 / -1;
-  display: flex;
-  justify-content: flex-end;
-  margin-top: .2rem;
-}
-
-.logout-btn {
-  margin-top: auto;
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  width: 100%;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s;
-}
-
-.logout-btn:hover {
-  background-color: #c0392b;
+/* Texte vide (aucune transaction) */
+.transactions-list p {
+  text-align: center;
+  color: var(--muted);
+  font-size: .95rem;
+  margin: 1rem 0;
 }
