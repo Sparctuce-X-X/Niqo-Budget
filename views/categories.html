@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Catégories – NIQO Budget</title>
+  <title>Categories – NIQO Budget</title>
   <link rel="stylesheet" href="../css/style.css" />
   <script src="../js/categories.js" defer></script>
   <script src="../js/main.js" defer></script>
-   <script src="../js/logout.js" defer></script>
+  <script src="../js/logout.js" defer></script>
 </head>
 <body>
   <div class="layout">
@@ -19,50 +19,50 @@
       <nav class="nav">
         <a href="dashboard.html">Dashboard</a>
         <a href="transactions.html">Transactions</a>
-        <a href="categories.html" class="active" aria-current="page">Catégories</a>
-        <a href="settings.html">Paramètres</a>
+        <a href="categories.html" class="active" aria-current="page">Categories</a>
+        <a href="settings.html">Settings</a>
       </nav>
 
-      <button id="logout-btn" class="logout-btn">Déconnexion</button>
+      <button id="logout-btn" class="logout-btn">Log out</button>
     </aside>
 
     <main class="main">
       <header class="main-header">
-        <h1>Catégories</h1>
+        <h1>Categories</h1>
       </header>
 
       <section class="cards-grid">
-        <!-- Catégories par défaut -->
+        <!-- Default categories -->
         <article class="card">
-          <h3>Catégories par défaut</h3>
+          <h3>Default Categories</h3>
           <ul id="default-cats" class="cat-list">
-            <!-- rempli par categories.js -->
+            <!-- filled by categories.js -->
           </ul>
         </article>
 
-        <!-- Catégories personnalisées -->
+        <!-- Custom categories -->
         <article class="card">
-          <h3>Catégories personnalisées</h3>
+          <h3>Custom Categories</h3>
 
           <form id="cat-form" class="cat-form">
             <input
               type="text"
               name="name"
               class="cat-input"
-              placeholder="Nom de la catégorie"
+              placeholder="Category name"
               required
             />
             <select name="type" class="cat-select" required>
-              <option value="expense">Dépense</option>
-              <option value="income">Revenu</option>
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
             </select>
-            <button type="submit" class="btn">Ajouter</button>
+            <button type="submit" class="btn">Add</button>
           </form>
 
           <ul id="custom-cats" class="cat-list">
-            <!-- rempli par categories.js -->
+            <!-- filled by categories.js -->
           </ul>
-          <p id="custom-empty" class="muted">Aucune catégorie personnalisée.</p>
+          <p id="custom-empty" class="muted">No custom categories yet.</p>
         </article>
       </section>
     </main>

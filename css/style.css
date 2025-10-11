@@ -40,14 +40,29 @@ body{
 .layout{display:flex; width:100%}
 
 /* ========= SIDEBAR ========= */
+/* Sidebar pinned to the left, no bottom gap */
 .sidebar{
+  position: fixed;
+  top: 0; left: 0; bottom: 0;      /* full height */
   width: 248px;
-  background: #0f1115; /* sombre, presque noir bleuté */
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;  /* pushes logout to bottom */
+
+  padding: 28px 18px 12px;         /* smaller bottom padding */
+  background: #0f1115;
   color: #cfd3da;
-  padding: 28px 18px;
-  display:flex; flex-direction:column; gap:28px;
   border-right: 1px solid rgba(255,255,255,.06);
+  overflow-y: auto;                 /* scroll inside if long */
+  box-sizing: border-box;
 }
+
+/* Shift main content so it doesn't go under the fixed sidebar */
+.main{ margin-left: 248px; }
+
+.logout-btn{ margin-top: auto; margin-bottom: 0; }
+
 
 .logo{
   display:flex; align-items:center; gap:.65rem;
@@ -744,3 +759,73 @@ body{
   font-size: .95rem;
   margin: 1rem 0;
 }
+
+  .card.transactions-card {
+    display: flex;
+    flex-direction: column;
+    height: 500px; /* fixed height for card — adjust as needed */
+    max-height: 70vh; /* ensures good fit on smaller screens */
+    overflow: hidden;
+  }
+
+  .transactions-card h3 {
+    margin-bottom: 10px;
+    flex-shrink: 0;
+  }
+
+  .transactions-card .table-wrap {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-2);
+  }
+
+  /* Scrollbar styling */
+  .transactions-card .table-wrap::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .transactions-card .table-wrap::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 999px;
+  }
+
+  .transactions-card .table-wrap::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  /* Adjust table layout */
+  .transactions-card table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .transactions-card th,
+  .transactions-card td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .transactions-card tr:hover td {
+    background: #fcfbfe;
+  }
+
+  /* Keep table header fixed */
+  .transactions-card thead th {
+    position: sticky;
+    top: 0;
+    background: #fafafb;
+    z-index: 2;
+  }
+
+  /* Responsive tweak */
+  @media (max-width: 640px) {
+    .card.transactions-card {
+      height: auto;
+      max-height: none;
+    }
+  }
+
+
