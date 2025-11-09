@@ -365,6 +365,35 @@ body {
   box-shadow:0 6px 14px rgba(122,90,248,.25);
 }
 
+/* Limit only the Name input width in Settings */
+#profile-form input#profile-name {
+  max-width: 220px;          /* réduit la largeur du champ */
+  width: 100%;               /* garde la réactivité */
+  box-sizing: border-box;
+}
+
+/* Compact Amount, Date, and Category fields */
+#tx-form input[name="amount"] {
+  max-width: 160px;
+}
+
+#tx-form input[name="date"] {
+  max-width: 180px;
+}
+
+#tx-form select[name="category"] {
+  max-width: 200px;
+}
+
+/* Ensure they stay aligned nicely */
+#tx-form .form-field {
+  min-width: 0;
+}
+
+
+
+
+
 /* =========================
    5) RESPONSIVE (tout à la fin)
 ========================= */
@@ -379,4 +408,17 @@ body {
 }
 @media (max-width:520px){
   .card #tx-form.form-grid{ grid-template-columns:1fr; }
+}
+@media (max-width: 640px) {
+  #profile-form input#profile-name {
+    max-width: 100%;         /* pleine largeur sur mobile */
+  }
+}
+/* On small screens, go full width again */
+@media (max-width: 640px) {
+  #tx-form input[name="amount"],
+  #tx-form input[name="date"],
+  #tx-form select[name="category"] {
+    max-width: 100%;
+  }
 }
