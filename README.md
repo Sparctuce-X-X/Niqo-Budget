@@ -1,9 +1,9 @@
 # Niqo-Budget
 
-**Video Demo:** [YouTube unlisted URL]
+**Video Demo:** https://www.youtube.com/watch?v=9il8a2y-K4M
 
 **Author:** Huang Dominique  
-**Usernames:** GitHub `Spartcuce-X-X` · edX `[edX username]`  
+**Usernames:** GitHub `Spartcuce-X-X` · edX `huang_dominique`  
 **Location & Date:** Paris , France — 09 Nov 2025
 
 ---
